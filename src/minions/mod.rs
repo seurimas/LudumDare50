@@ -1,7 +1,8 @@
 use crate::{combat::ContactType, prelude::*};
 
 mod ai;
-use self::ai::*;
+pub mod behavior_tree;
+use self::{ai::*, behavior_tree::MinionThoughts};
 
 use crate::{
     ai::powered::PoweredFunction, animation::bundles::AnimatedSprite,

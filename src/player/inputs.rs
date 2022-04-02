@@ -2,6 +2,7 @@ use crate::prelude::*;
 
 use crate::{animation::component_types::AnimationState, terrain::GroundedState};
 
+use super::attack_behavior_tree::PlayerAttackType;
 use super::{PlayerState, PlayerStats};
 
 #[derive(Default, Component, Debug, Clone, Reflect, Inspectable)]
@@ -38,7 +39,9 @@ pub fn player_key_input_system(
 }
 
 pub fn player_movement_system(
+    mut commands: Commands,
     mut query: Query<(
+        Entity,
         &PlayerStats,
         &PlayerState,
         &PlayerInputState,
@@ -48,7 +51,7 @@ pub fn player_movement_system(
         &mut RigidBodyVelocityComponent,
     )>,
 ) {
-    for (stats, state, input, mut grounded, mut sprite, mut animation, mut velocity) in
+    for (entity, stats, state, input, mut grounded, mut sprite, mut animation, mut velocity) in
         query.iter_mut()
     {
         if *state != PlayerState::Controlled {
@@ -66,6 +69,8 @@ pub fn player_movement_system(
             if input.wants_jump {
                 velocity.linvel.y = stats.jump_speed;
                 grounded.lift_off();
+            } else if input.wants_attack {
+                commands.entity(entity).insert(PlayerAttackType::Slash);
             }
         } else {
             if input.tilt_x != 0.0 {
