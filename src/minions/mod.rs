@@ -9,10 +9,11 @@ use crate::{
     base_bundles::WorldEntityBuilder, terrain::GroundedState,
 };
 
-#[derive(Component, Debug, Reflect, Inspectable, Default, Copy, Clone)]
+#[derive(Component, Debug, Reflect, Inspectable, Default, Clone)]
 pub struct Minion {
     los_distance: f32,
     timidity: i32,
+    hit_by: Vec<u32>,
 }
 
 #[derive(Component)]
@@ -23,6 +24,16 @@ impl Minion {
         Minion {
             los_distance,
             timidity,
+            hit_by: Vec::new(),
+        }
+    }
+
+    pub fn hit(&mut self, attack_id: u32) -> bool {
+        if self.hit_by.contains(&attack_id) {
+            false
+        } else {
+            self.hit_by.push(attack_id);
+            true
         }
     }
 }
@@ -31,7 +42,6 @@ fn spawn_minion(mut commands: Commands, assets: Res<AssetServer>) {
     let world_entity = WorldEntityBuilder::of_size(0.5).at_position(5.0, 10.0);
     let mut transform = Transform::default();
     transform.translation.z = 1.0;
-    transform.scale = Vec3::new(1.0 / 6.4, 1.0 / 6.4, 1.0 / 6.4);
     commands
         .spawn_bundle(AnimatedSprite {
             sprite_animation: assets.load("sprites/Minion.sprite"),

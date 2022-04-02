@@ -70,7 +70,13 @@ pub fn player_movement_system(
                 velocity.linvel.y = stats.jump_speed;
                 grounded.lift_off();
             } else if input.wants_attack {
-                commands.entity(entity).insert(PlayerAttackType::Slash);
+                if input.tilt_x == 0.0 {
+                    commands.entity(entity).insert(PlayerAttackType::Slash);
+                } else {
+                    commands
+                        .entity(entity)
+                        .insert(PlayerAttackType::RunningSlash(velocity.linvel.x));
+                }
             }
         } else {
             if input.tilt_x != 0.0 {

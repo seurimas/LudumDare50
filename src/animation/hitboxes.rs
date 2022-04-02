@@ -27,6 +27,14 @@ impl Hitbox {
     pub fn get_half_y(&self) -> f32 {
         (self.max.y - self.min.y) / 2.0
     }
+
+    pub fn flip_x(&mut self) {
+        let min = Vec2::new(-self.max.x, self.min.y);
+        let max = Vec2::new(-self.min.x, self.max.y);
+        println!("{:?} {:?} -> {:?} {:?}", self.min, self.max, min, max);
+        self.min = min;
+        self.max = max;
+    }
 }
 
 #[derive(Component, Default, Debug, Clone, Deserialize, Serialize)]

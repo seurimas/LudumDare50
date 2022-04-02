@@ -1,1 +1,1 @@
-(atlas_tile_size:(128,128),atlas_columns:4,atlas_rows:4,atlas_path:"sprites\\Player.png",animation_path:"sprites\\Player.anim",hitboxes:Some((hitboxes:[[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]])))
+(atlas_tile_size:(128,128),atlas_columns:4,atlas_rows:4,atlas_path:"sprites\\Player.png",animation_path:"sprites\\Player.anim",hitboxes:Some((hitboxes:[[],[],[],[],[],[(hitbox_type:Hit,min:(18,-62),max:(74,14))],[(hitbox_type:Hit,min:(24,-22),max:(76,36))],[(hitbox_type:Hit,min:(22,-2),max:(64,32))],[],[],[],[],[],[],[],[]])))

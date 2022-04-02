@@ -13,3 +13,12 @@ pub fn get_vec_to_target(
         target_pos.0.position.translation.y - my_pos.0.position.translation.y,
     )
 }
+
+pub fn has_child<P>(children: &Option<&Children>, predicate: P) -> bool
+where
+    P: FnMut(&&Entity) -> bool,
+{
+    children
+        .and_then(|children| children.iter().find(predicate))
+        .is_some()
+}

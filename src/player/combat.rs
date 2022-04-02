@@ -1,4 +1,9 @@
-use crate::{prelude::*, terrain::GroundedState};
+use crate::{
+    animation::hitboxes::{Hitbox, SpriteSheetHitboxes},
+    prelude::*,
+    sensors::SensorEntity,
+    terrain::GroundedState,
+};
 
 use super::PlayerState;
 

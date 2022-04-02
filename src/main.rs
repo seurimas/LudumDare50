@@ -5,6 +5,7 @@ use bevy_rapier2d::prelude::*;
 use combat::CombatPlugin;
 use minions::MinionsPlugin;
 use player::PlayerPlugin;
+use sensors::sync_hitboxes;
 use terrain::TerrainPlugin;
 
 mod ai;
@@ -14,6 +15,7 @@ mod combat;
 mod minions;
 mod player;
 mod prelude;
+mod sensors;
 mod terrain;
 
 pub fn setup_camera(mut commands: Commands) {
@@ -53,9 +55,10 @@ fn main() {
         .add_plugin(CombatPlugin)
         .add_plugin(TerrainPlugin)
         .add_system(display_rapier_events)
+        .add_system(sync_hitboxes)
         .insert_resource(RapierConfiguration {
             gravity: Vector::y() * -98.1,
-            scale: 10.0,
+            scale: 32.0,
             ..Default::default()
         })
         .run();

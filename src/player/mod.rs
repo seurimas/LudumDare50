@@ -7,13 +7,14 @@ use crate::prelude::*;
 
 use crate::animation::bundles::AnimatedSprite;
 use crate::base_bundles::WorldEntityBuilder;
+use crate::sensors::SensorEntity;
 use crate::setup_camera;
 use crate::terrain::GroundedState;
 
 use self::attack_behavior_tree::attack_brain_system;
 use self::attack_behavior_tree::attack_impulse_system;
 use self::attack_behavior_tree::attack_impulse_update_system;
-use self::attack_behavior_tree::AttackImpulses;
+pub use self::attack_behavior_tree::AttackImpulses;
 use self::attack_behavior_tree::PlayerAttackType;
 use self::camera::player_camera_system;
 use self::combat::player_hit_stun_recovery_system;
@@ -40,7 +41,6 @@ fn spawn_player(mut commands: Commands, assets: Res<AssetServer>) {
     let world_entity = WorldEntityBuilder::of_size(1.0).at_position(0.0, 10.0);
     let mut transform = Transform::default();
     transform.translation.z = 1.0;
-    transform.scale = Vec3::new(1.0 / 3.2, 1.0 / 3.2, 1.0 / 3.2);
     commands
         .spawn_bundle(AnimatedSprite {
             sprite_animation: assets.load("sprites/Player.sprite"),
@@ -80,7 +80,6 @@ impl Plugin for PlayerPlugin {
             .register_type::<PlayerStats>()
             .register_inspectable::<PlayerStats>()
             .register_type::<AttackImpulses>()
-            .register_inspectable::<AttackImpulses>()
             .register_type::<PlayerAttackType>()
             .register_inspectable::<PlayerAttackType>()
             .register_type::<PlayerInputState>()
