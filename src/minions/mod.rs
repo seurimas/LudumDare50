@@ -1,6 +1,4 @@
-use bevy::prelude::*;
-use bevy_inspector_egui::{Inspectable, RegisterInspectable};
-use bevy_rapier2d::physics::RigidBodyPositionSync;
+use crate::{combat::ContactType, prelude::*};
 
 mod ai;
 use self::ai::*;
@@ -13,21 +11,17 @@ use crate::{
 #[derive(Component, Debug, Reflect, Inspectable, Default, Copy, Clone)]
 pub struct Minion {
     los_distance: f32,
-    sees_player: bool,
-    is_attacking: bool,
-    waiting_for: f32,
+    timidity: i32,
 }
 
 #[derive(Component)]
 pub struct MinionBrain(Box<dyn PoweredFunction<World = MinionThoughts> + Send + Sync>);
 
 impl Minion {
-    pub fn new(los_distance: f32) -> Self {
+    pub fn new(los_distance: f32, timidity: i32) -> Self {
         Minion {
             los_distance,
-            sees_player: false,
-            is_attacking: false,
-            waiting_for: 0.0,
+            timidity,
         }
     }
 }
@@ -45,7 +39,9 @@ fn spawn_minion(mut commands: Commands, assets: Res<AssetServer>) {
         })
         .insert_bundle(world_entity.rigid_body_bundle())
         .insert_bundle(world_entity.collider_bundle())
-        .insert(Minion::new(10.0))
+        .insert(ContactType::Minion(1))
+        .insert(Health::new(3))
+        .insert(Minion::new(10.0, 1))
         .insert(MinionThoughts::default())
         .insert(MinionBrain(minion_brain()))
         .insert(GroundedState::new(0.5, 0.5, 0.1))

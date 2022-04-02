@@ -3,9 +3,7 @@ mod grounded;
 pub use self::entity::*;
 pub use self::grounded::*;
 
-use bevy::prelude::*;
-use bevy_inspector_egui::Inspectable;
-use bevy_inspector_egui::RegisterInspectable;
+use crate::prelude::*;
 
 pub fn spawn_bedrock(mut commands: Commands) {
     spawn_terrain(&mut commands, Vec2::new(0.0, -5.0), 500.0, 5.0);

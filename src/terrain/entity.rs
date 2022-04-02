@@ -1,6 +1,4 @@
-use bevy::prelude::*;
-use bevy_inspector_egui::Inspectable;
-use bevy_rapier2d::{prelude::*, rapier::geometry::ColliderShape};
+use crate::prelude::*;
 
 #[derive(Component, Debug, Reflect, Inspectable, Default, Copy, Clone)]
 pub struct TerrainBlock;

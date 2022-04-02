@@ -2,6 +2,7 @@ use animation::AnimationPlugin;
 use bevy::prelude::*;
 use bevy_inspector_egui::{RegisterInspectable, WorldInspectorPlugin};
 use bevy_rapier2d::prelude::*;
+use combat::CombatPlugin;
 use minions::MinionsPlugin;
 use player::PlayerPlugin;
 use terrain::TerrainPlugin;
@@ -9,8 +10,10 @@ use terrain::TerrainPlugin;
 mod ai;
 mod animation;
 mod base_bundles;
+mod combat;
 mod minions;
 mod player;
+mod prelude;
 mod terrain;
 
 pub fn setup_camera(mut commands: Commands) {
@@ -47,6 +50,7 @@ fn main() {
         .add_plugin(AnimationPlugin)
         .add_plugin(PlayerPlugin)
         .add_plugin(MinionsPlugin)
+        .add_plugin(CombatPlugin)
         .add_plugin(TerrainPlugin)
         .add_system(display_rapier_events)
         .insert_resource(RapierConfiguration {

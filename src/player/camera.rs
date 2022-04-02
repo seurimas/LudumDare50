@@ -1,5 +1,4 @@
-use bevy::prelude::*;
-use bevy_inspector_egui::Inspectable;
+use crate::prelude::*;
 
 use super::PlayerStats;
 

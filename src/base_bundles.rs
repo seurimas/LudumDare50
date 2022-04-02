@@ -1,7 +1,4 @@
-use std::f32::consts::PI;
-
-use bevy::prelude::*;
-use bevy_rapier2d::{prelude::*, rapier::geometry};
+use crate::prelude::*;
 
 pub struct WorldEntityBuilder {
     pub radius: f32,
@@ -36,10 +33,7 @@ impl WorldEntityBuilder {
 
     pub fn collider_bundle(&self) -> ColliderBundle {
         ColliderBundle {
-            shape: ColliderShapeComponent(geometry::ColliderShape::cuboid(
-                self.radius,
-                self.radius,
-            )),
+            shape: ColliderShapeComponent(ColliderShape::cuboid(self.radius, self.radius)),
             mass_properties: MassProperties::new(point![0.0, 0.0], self.mass, 0.0).into(),
             material: ColliderMaterial::new(1.0, 0.0).into(),
             flags: (ActiveEvents::CONTACT_EVENTS | ActiveEvents::INTERSECTION_EVENTS).into(),

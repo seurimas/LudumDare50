@@ -1,11 +1,8 @@
 mod camera;
+mod combat;
 mod inputs;
 
-use bevy::prelude::*;
-use bevy_inspector_egui::Inspectable;
-use bevy_inspector_egui::RegisterInspectable;
-use bevy_rapier2d::physics::RigidBodyPositionSync;
-use bevy_rapier2d::render::ColliderDebugRender;
+use crate::prelude::*;
 
 use crate::animation::bundles::AnimatedSprite;
 use crate::base_bundles::WorldEntityBuilder;
@@ -13,6 +10,7 @@ use crate::setup_camera;
 use crate::terrain::GroundedState;
 
 use self::camera::player_camera_system;
+use self::combat::player_hit_stun_recovery_system;
 use self::inputs::player_key_input_system;
 use self::inputs::player_movement_system;
 use self::inputs::PlayerInputState;
@@ -23,6 +21,12 @@ pub struct PlayerStats {
     pub air_speed: f32,
     pub jump_speed: f32,
     pub jump_delay: f32,
+}
+
+#[derive(Component, Debug, Reflect, Inspectable, Copy, Clone, PartialEq, Eq)]
+pub enum PlayerState {
+    Controlled,
+    HitStun,
 }
 
 fn spawn_player(mut commands: Commands, assets: Res<AssetServer>) {
@@ -38,7 +42,10 @@ fn spawn_player(mut commands: Commands, assets: Res<AssetServer>) {
         })
         .insert_bundle(world_entity.rigid_body_bundle())
         .insert_bundle(world_entity.collider_bundle())
+        .insert(ContactType::Player)
+        .insert(Health::new(20))
         .insert(PlayerInputState::default())
+        .insert(PlayerState::Controlled)
         .insert(PlayerStats {
             walk_speed: 10.0,
             air_speed: 4.0,
@@ -57,6 +64,7 @@ impl Plugin for PlayerPlugin {
         app.add_system(player_camera_system)
             .add_system(player_movement_system)
             .add_system(player_key_input_system)
+            .add_system(player_hit_stun_recovery_system)
             .add_startup_system(setup_camera)
             .add_startup_system(spawn_player)
             .register_type::<PlayerStats>()

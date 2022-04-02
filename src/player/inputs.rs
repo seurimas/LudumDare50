@@ -1,10 +1,8 @@
-use bevy::prelude::*;
-use bevy_inspector_egui::prelude::*;
-use bevy_rapier2d::prelude::*;
+use crate::prelude::*;
 
 use crate::{animation::component_types::AnimationState, terrain::GroundedState};
 
-use super::PlayerStats;
+use super::{PlayerState, PlayerStats};
 
 #[derive(Default, Component, Debug, Clone, Reflect, Inspectable)]
 #[reflect(Component)]
@@ -42,6 +40,7 @@ pub fn player_key_input_system(
 pub fn player_movement_system(
     mut query: Query<(
         &PlayerStats,
+        &PlayerState,
         &PlayerInputState,
         &mut GroundedState,
         &mut TextureAtlasSprite,
@@ -49,7 +48,12 @@ pub fn player_movement_system(
         &mut RigidBodyVelocityComponent,
     )>,
 ) {
-    for (stats, input, mut grounded, mut sprite, mut animation, mut velocity) in query.iter_mut() {
+    for (stats, state, input, mut grounded, mut sprite, mut animation, mut velocity) in
+        query.iter_mut()
+    {
+        if *state != PlayerState::Controlled {
+            continue;
+        }
         if grounded.on_the_ground() {
             if input.tilt_x != 0.0 {
                 velocity.linvel.x = stats.walk_speed * input.tilt_x;

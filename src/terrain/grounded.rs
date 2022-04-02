@@ -1,8 +1,5 @@
-use bevy::prelude::*;
-use bevy_inspector_egui::prelude::*;
-use bevy_rapier2d::prelude::*;
-
 use super::TerrainBlock;
+use crate::prelude::*;
 
 #[derive(Default, Component, Debug, Clone, Reflect, Inspectable)]
 #[reflect(Component)]
