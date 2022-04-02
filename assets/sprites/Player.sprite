@@ -1,0 +1,1 @@
+(atlas_tile_size:(128,128),atlas_columns:4,atlas_rows:4,atlas_path:"sprites\\Player.png",animation_path:"sprites\\Player.anim",hitboxes:Some((hitboxes:[[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]])))
