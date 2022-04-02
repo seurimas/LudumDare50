@@ -1,0 +1,1 @@
+(animations:{"Lunge":(base_frames:[1,0],parameters:1,parameter_offset:8,single_frame_duration:0.195),"Idle":(base_frames:[0,0],parameters:1,parameter_offset:8,single_frame_duration:0.041666668)})

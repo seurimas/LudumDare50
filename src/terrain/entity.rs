@@ -8,7 +8,7 @@ pub struct TerrainBlock;
 pub fn terrain_collider_bundle(width: f32, height: f32) -> ColliderBundle {
     ColliderBundle {
         shape: ColliderShapeComponent(ColliderShape::cuboid(width / 2.0, height / 2.0)),
-        material: ColliderMaterial::new(0.0, 0.0).into(),
+        material: ColliderMaterial::new(1.0, 0.0).into(),
         flags: (ActiveEvents::CONTACT_EVENTS | ActiveEvents::INTERSECTION_EVENTS).into(),
         ..Default::default()
     }

@@ -10,9 +10,9 @@ use bevy_rapier2d::render::ColliderDebugRender;
 use crate::animation::bundles::AnimatedSprite;
 use crate::base_bundles::WorldEntityBuilder;
 use crate::setup_camera;
+use crate::terrain::GroundedState;
 
 use self::camera::player_camera_system;
-use self::inputs::player_grounded_system;
 use self::inputs::player_key_input_system;
 use self::inputs::player_movement_system;
 use self::inputs::PlayerInputState;
@@ -20,6 +20,7 @@ use self::inputs::PlayerInputState;
 #[derive(Component, Debug, Reflect, Inspectable, Default, Copy, Clone)]
 pub struct PlayerStats {
     pub walk_speed: f32,
+    pub air_speed: f32,
     pub jump_speed: f32,
     pub jump_delay: f32,
 }
@@ -40,9 +41,11 @@ fn spawn_player(mut commands: Commands, assets: Res<AssetServer>) {
         .insert(PlayerInputState::default())
         .insert(PlayerStats {
             walk_speed: 10.0,
+            air_speed: 4.0,
             jump_speed: 50.0,
             jump_delay: 0.15,
         })
+        .insert(GroundedState::new(1.0, 1.0, 0.1))
         .insert(RigidBodyPositionSync::Discrete)
         .insert(Name::new("player"));
 }
@@ -54,7 +57,6 @@ impl Plugin for PlayerPlugin {
         app.add_system(player_camera_system)
             .add_system(player_movement_system)
             .add_system(player_key_input_system)
-            .add_system(player_grounded_system)
             .add_startup_system(setup_camera)
             .add_startup_system(spawn_player)
             .register_type::<PlayerStats>()

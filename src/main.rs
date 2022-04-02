@@ -2,11 +2,14 @@ use animation::AnimationPlugin;
 use bevy::prelude::*;
 use bevy_inspector_egui::{RegisterInspectable, WorldInspectorPlugin};
 use bevy_rapier2d::prelude::*;
+use minions::MinionsPlugin;
 use player::PlayerPlugin;
 use terrain::TerrainPlugin;
 
+mod ai;
 mod animation;
 mod base_bundles;
+mod minions;
 mod player;
 mod terrain;
 
@@ -43,6 +46,7 @@ fn main() {
         .add_plugin(WorldInspectorPlugin::new())
         .add_plugin(AnimationPlugin)
         .add_plugin(PlayerPlugin)
+        .add_plugin(MinionsPlugin)
         .add_plugin(TerrainPlugin)
         .add_system(display_rapier_events)
         .insert_resource(RapierConfiguration {

@@ -41,7 +41,7 @@ impl WorldEntityBuilder {
                 self.radius,
             )),
             mass_properties: MassProperties::new(point![0.0, 0.0], self.mass, 0.0).into(),
-            material: ColliderMaterial::new(0.0, 0.0).into(),
+            material: ColliderMaterial::new(1.0, 0.0).into(),
             flags: (ActiveEvents::CONTACT_EVENTS | ActiveEvents::INTERSECTION_EVENTS).into(),
             ..Default::default()
         }
@@ -55,6 +55,7 @@ impl WorldEntityBuilder {
                 angvel: 0.0,
             }
             .into(),
+            mass_properties: RigidBodyMassPropsFlags::ROTATION_LOCKED.into(),
             ..Default::default()
         }
     }
