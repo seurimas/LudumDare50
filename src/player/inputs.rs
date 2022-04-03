@@ -88,6 +88,11 @@ pub fn player_movement_system(
                     velocity.linvel.x = desired_x_vel;
                     sprite.flip_x = input.tilt_x < 0.0;
                 }
+                if input.wants_attack {
+                    commands.entity(entity).insert(PlayerAttackType::AirSlash);
+                }
+            } else if input.wants_attack {
+                commands.entity(entity).insert(PlayerAttackType::Plunge);
             }
         }
     }

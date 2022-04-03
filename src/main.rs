@@ -57,7 +57,7 @@ fn main() {
         .add_system(display_rapier_events)
         .add_system(sync_hitboxes)
         .insert_resource(RapierConfiguration {
-            gravity: Vector::y() * -98.1,
+            gravity: Vector::y() * -64.0,
             scale: 32.0,
             ..Default::default()
         })

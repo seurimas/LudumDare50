@@ -56,7 +56,7 @@ fn spawn_player(mut commands: Commands, assets: Res<AssetServer>) {
         .insert(PlayerStats {
             walk_speed: 10.0,
             air_speed: 4.0,
-            jump_speed: 50.0,
+            jump_speed: 30.0,
             jump_delay: 0.15,
         })
         .insert(GroundedState::new(1.0, 1.0, 0.1))

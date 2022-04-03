@@ -35,8 +35,26 @@ impl PlayerAttackType {
                     "RunningSlash".to_string(),
                 )),
             ]),
-            PlayerAttackType::AirSlash => todo!(),
-            PlayerAttackType::Plunge => todo!(),
+            PlayerAttackType::AirSlash => PoweredTreeDef::Sequence(vec![
+                PoweredTreeDef::User(AttackTreeNodeDef::GoIntangible),
+                PoweredTreeDef::User(AttackTreeNodeDef::SetDamage(2)),
+                PoweredTreeDef::User(AttackTreeNodeDef::SetFrame(8, 0.1)),
+                PoweredTreeDef::User(AttackTreeNodeDef::WaitForFalling),
+                PoweredTreeDef::User(AttackTreeNodeDef::SetFrame(9, 0.1)),
+                PoweredTreeDef::User(AttackTreeNodeDef::WaitForGround),
+                PoweredTreeDef::User(AttackTreeNodeDef::PlayAnimation("AirSlash".to_string())),
+                PoweredTreeDef::User(AttackTreeNodeDef::WaitForAnimation("AirSlash".to_string())),
+            ]),
+            PlayerAttackType::Plunge => PoweredTreeDef::Sequence(vec![
+                PoweredTreeDef::User(AttackTreeNodeDef::GoIntangible),
+                PoweredTreeDef::User(AttackTreeNodeDef::SetDamage(3)),
+                PoweredTreeDef::User(AttackTreeNodeDef::SetFrame(8, 0.1)),
+                PoweredTreeDef::User(AttackTreeNodeDef::WaitForFalling),
+                PoweredTreeDef::User(AttackTreeNodeDef::SetFrame(9, 0.1)),
+                PoweredTreeDef::User(AttackTreeNodeDef::WaitForGround),
+                PoweredTreeDef::User(AttackTreeNodeDef::PlayAnimation("Plunge".to_string())),
+                PoweredTreeDef::User(AttackTreeNodeDef::WaitForAnimation("Plunge".to_string())),
+            ]),
         }
         .create_tree()
     }
@@ -80,8 +98,10 @@ pub enum AttackTreeNodeDef {
     ClearVelocity,
     PlayAnimation(String),
     SetFrame(usize, f32),
+    ClearFrame,
     WaitForFrame,
     WaitForAnimation(String),
+    WaitForFalling,
     WaitForGround,
     OnTheGround,
     WaitForHit,
@@ -115,6 +135,7 @@ impl PoweredFunction for AttackTreeNodeDef {
                 PoweredFunctionState::Complete(gas_left)
             }
             AttackTreeNodeDef::PlayAnimation(animation) => {
+                attack.animation_frame = None;
                 attack.play_animation = Some(animation.clone());
                 PoweredFunctionState::Complete(gas_left)
             }
@@ -124,6 +145,10 @@ impl PoweredFunction for AttackTreeNodeDef {
                 } else {
                     PoweredFunctionState::Waiting(gas_left)
                 }
+            }
+            AttackTreeNodeDef::ClearFrame => {
+                attack.animation_frame = None;
+                PoweredFunctionState::Complete(gas_left)
             }
             AttackTreeNodeDef::WaitForAnimation(animation) => {
                 if attack.animation.eq(animation) {
@@ -141,6 +166,13 @@ impl PoweredFunction for AttackTreeNodeDef {
             }
             AttackTreeNodeDef::WaitForGround => {
                 if attack.on_the_ground {
+                    PoweredFunctionState::Complete(gas_left)
+                } else {
+                    PoweredFunctionState::Waiting(gas_left)
+                }
+            }
+            AttackTreeNodeDef::WaitForFalling => {
+                if attack.speed.y < 0.0 {
                     PoweredFunctionState::Complete(gas_left)
                 } else {
                     PoweredFunctionState::Waiting(gas_left)
@@ -249,7 +281,10 @@ pub fn attack_impulse_system(
             *contact_type = ContactType::Inactive;
         }
         if let Some(frame) = impulses.animation_frame {
-            sprite.index = frame;
+            if impulses.animation_time > 0.0 {
+                sprite.index = frame;
+                animation_state.transition_to("", false);
+            }
         }
         if let Some(velocity_vec) = impulses.set_speed {
             velocity.linvel = velocity_vec.into();
