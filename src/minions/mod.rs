@@ -39,7 +39,10 @@ impl Minion {
 }
 
 fn spawn_minion(mut commands: Commands, assets: Res<AssetServer>) {
-    let world_entity = WorldEntityBuilder::of_size(0.5).at_position(5.0, 10.0);
+    let world_entity = WorldEntityBuilder::of_size(0.5)
+        .at_position(5.0, 10.0)
+        .with_solver_group(0b0010)
+        .with_solver_filter(0b0010);
     let mut transform = Transform::default();
     transform.translation.z = 1.0;
     commands

@@ -38,7 +38,10 @@ pub enum PlayerState {
 }
 
 fn spawn_player(mut commands: Commands, assets: Res<AssetServer>) {
-    let world_entity = WorldEntityBuilder::of_size(1.0).at_position(0.0, 10.0);
+    let world_entity = WorldEntityBuilder::of_size(1.0)
+        .at_position(0.0, 10.0)
+        .with_solver_group(0b0001)
+        .with_solver_filter(0b0001);
     let mut transform = Transform::default();
     transform.translation.z = 1.0;
     commands
